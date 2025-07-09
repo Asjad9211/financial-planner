@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dreams to Reality - Financial Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 50%, #ecfdf5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+
+        .tagline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            color: #7c3aed;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .goal-button {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .goal-button:hover {
+            border-color: #a855f7;
+        }
+
+        .goal-button.selected {
+            border-color: #7c3aed;
+            background: #f3f4f6;
+        }
+
+        .goal-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .goal-range {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #a855f7, #7c3aed);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #7c3aed;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #7c3aed;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-top: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .daily-challenge {
+            background: linear-gradient(135deg, #f97316, #ec4899);
+            color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .daily-challenge h2 {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .tips-section {
+            margin-top: 1rem;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .tip-card {
+            background: rgba(255,255,255,0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .strategy-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            border-left: 4px solid;
+        }
+
+        .strategy-card.loan {
+            border-left-color: #ef4444;
+        }
+
+        .strategy-card.rd {
+            border-left-color: #3b82f6;
+        }
+
+        .strategy-card.mf {
+            border-left-color: #10b981;
+        }
+
+        .strategy-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .strategy-icon {
+            font-size: 1.5rem;
+        }
+
+        .strategy-icon.loan {
+            color: #ef4444;
+        }
+
+        .strategy-icon.rd {
+            color: #3b82f6;
+        }
+
+        .strategy-icon.mf {
+            color: #10b981;
+        }
+
+        .strategy-stats {
+            margin-bottom: 1rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-label-text {
+            color: #6b7280;
+        }
+
+        .stat-value-text {
+            font-weight: bold;
+        }
+
+        .stat-value-text.loan {
+            color: #ef4444;
+        }
+
+        .stat-value-text.rd {
+            color: #3b82f6;
+        }
+
+        .stat-value-text.mf {
+            color: #10b981;
+        }
+
+        .stat-value-text.green {
+            color: #10b981;
+        }
+
+        .risk-info {
+            background: #f9fafb;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .risk-info.loan {
+            background: #fef2f2;
+            color: #7f1d1d;
+        }
+
+        .risk-info.rd {
+            background: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .risk-info.mf {
+            background: #ecfdf5;
+            color: #14532d;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .recommendation h2 {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            background: rgba(255,255,255,0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .cta-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .goals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Dreams to Reality</h1>
+            <p>Smart financial planning for the ambitious middle class</p>
+            <div class="tagline">
+                <span>📈</span>
+                <span>Plan Smart • Save Daily • Achieve Systematically</span>
+            </div>
+        </div>
+
+        <!-- Goal Selection -->
+        <div class="card">
+            <h2>Choose Your Goal</h2>
+            <div class="goals-grid">
+                <div class="goal-button" data-goal="iphone">
+                    <div class="goal-icon">📱</div>
+                    <div class="goal-name">iPhone</div>
+                    <div class="goal-range">₹50k - ₹150k</div>
+                </div>
+                <div class="goal-button" data-goal="bike">
+                    <div class="goal-icon">🏍️</div>
+                    <div class="goal-name">Bike</div>
+                    <div class="goal-range">₹80k - ₹200k</div>
+                </div>
+                <div class="goal-button" data-goal="car">
+                    <div class="goal-icon">🚗</div>
+                    <div class="goal-name">Car</div>
+                    <div class="goal-range">₹500k - ₹1500k</div>
+                </div>
+                <div class="goal-button" data-goal="vacation">
+                    <div class="goal-icon">✈️</div>
+                    <div class="goal-name">Annual Vacation</div>
+                    <div class="goal-range">₹50k - ₹200k</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Goal Configuration -->
+        <div class="card hidden" id="configSection">
+            <h2>Plan Your Goal</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Target Amount</label>
+                    <input type="range" id="targetSlider" class="slider" min="50000" max="150000" step="5000" value="80000">
+                    <div class="value-display" id="targetDisplay">₹80,000</div>
+                </div>
+                <div class="form-group">
+                    <label>Timeline (months)</label>
+                    <input type="range" id="timelineSlider" class="slider" min="3" max="36" value="12">
+                    <div class="value-display" id="timelineDisplay">12 months</div>
+                </div>
+                <div class="form-group">
+                    <label>Current Savings</label>
+                    <input type="number" id="currentSavings" class="input-field" placeholder="₹0" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Monthly Income</label>
+                    <input type="number" id="monthlyIncome" class="input-field" placeholder="₹30,000" value="30000">
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Challenge -->
+        <div class="daily-challenge hidden" id="dailyChallenge">
+            <h2>☕ The Daily Challenge</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="dailyAmount">₹0</div>
+                    <div class="stat-label">per day</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="monthlyAmount">₹0</div>
+                    <div class="stat-label">per month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="incomePercent">0%</div>
+                    <div class="stat-label">of income</div>
+                </div>
+            </div>
+            <div class="tips-section" id="tipsSection">
+                <h3 style="margin-bottom: 0.5rem;">💡 Daily Saving Tips:</h3>
+                <div class="tips-grid" id="tipsGrid"></div>
+            </div>
+        </div>
+
+        <!-- Strategy Comparison -->
+        <div class="comparison-grid hidden" id="comparisonSection">
+            <!-- Loan Option -->
+            <div class="strategy-card loan">
+                <div class="strategy-header">
+                    <div class="strategy-icon loan">💳</div>
+                    <h3>Personal Loan</h3>
+                </div>
+                <div class="strategy-stats">
+                    <div class="stat-row">
+                        <span class="stat-label-text">Monthly EMI:</span>
+                        <span class="stat-value-text loan" id="loanEMI">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Total Interest:</span>
+                        <span class="stat-value-text loan" id="loanInterest">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Total Cost:</span>
+                        <span class="stat-value-text loan" id="loanTotal">₹0</span>
+                    </div>
+                </div>
+                <div class="risk-info loan">
+                    <strong>Risk:</strong> High EMI burden, debt trap possibility
+                </div>
+            </div>
+
+            <!-- RD Option -->
+            <div class="strategy-card rd">
+                <div class="strategy-header">
+                    <div class="strategy-icon rd">🐷</div>
+                    <h3>Recurring Deposit</h3>
+                </div>
+                <div class="strategy-stats">
+                    <div class="stat-row">
+                        <span class="stat-label-text">Monthly Saving:</span>
+                        <span class="stat-value-text rd" id="rdMonthly">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Interest Earned:</span>
+                        <span class="stat-value-text green" id="rdInterest">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Maturity Amount:</span>
+                        <span class="stat-value-text rd" id="rdMaturity">₹0</span>
+                    </div>
+                </div>
+                <div class="risk-info rd">
+                    <strong>Risk:</strong> Low risk, guaranteed returns
+                </div>
+            </div>
+
+            <!-- MF Option -->
+            <div class="strategy-card mf">
+                <div class="strategy-header">
+                    <div class="strategy-icon mf">📈</div>
+                    <h3>Mutual Fund SIP</h3>
+                </div>
+                <div class="strategy-stats">
+                    <div class="stat-row">
+                        <span class="stat-label-text">Monthly SIP:</span>
+                        <span class="stat-value-text mf" id="mfMonthly">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Expected Gains:</span>
+                        <span class="stat-value-text green" id="mfGains">₹0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label-text">Expected Value:</span>
+                        <span class="stat-value-text mf" id="mfMaturity">₹0</span>
+                    </div>
+                </div>
+                <div class="risk-info mf">
+                    <strong>Risk:</strong> Moderate risk, potential for higher returns
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="recommendation hidden" id="recommendationSection">
+            <h2>🎯 Smart Recommendation</h2>
+            <div class="recommendation-grid">
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">Best Strategy:</h3>
+                    <p class="recommendation-text" id="recommendationText"></p>
+                </div>
+                <div>
+                    <h3 style="margin-bottom: 0.5rem;">Why Avoid Loans:</h3>
+                    <p class="recommendation-text" id="loanWarning"></p>
+                </div>
+            </div>
+            <div class="cta-section">
+                <div class="cta-title" id="ctaTitle">Start with just ₹0 today!</div>
+                <div class="cta-subtitle">Your future self will thank you for this smart financial decision</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Goal data
+        const goals = {
+            iphone: { name: 'iPhone', min: 50000, max: 150000, default: 80000 },
+            bike: { name: 'Bike', min: 80000, max: 200000, default: 120000 },
+            car: { name: 'Car', min: 500000, max: 1500000, default: 800000 },
+            vacation: { name: 'Annual Vacation', min: 50000, max: 200000, default: 100000 }
+        };
+
+        // State
+        let selectedGoal = '';
+        let targetAmount = 80000;
+        let timeline = 12;
+        let currentSavings = 0;
+        let monthlyIncome = 30000;
+
+        // Daily saving tips
+        const savingTips = [
+            { amount: 20, tip: "Skip 1 coffee from café" },
+            { amount: 50, tip: "Cook lunch instead of ordering" },
+            { amount: 100, tip: "Use public transport 2 days" },
+            { amount: 150, tip: "One less food delivery per week" },
+            { amount: 200, tip: "Skip weekend movie + snacks" },
+            { amount: 300, tip: "Reduce shopping by one item" }
+        ];
+
+        // Utility functions
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function calculateAll() {
+            const remainingAmount = targetAmount - currentSavings;
+            const requiredMonthlySaving = remainingAmount / timeline;
+            const requiredDailySaving = requiredMonthlySaving / 30;
+
+            // Update daily challenge
+            document.getElementById('dailyAmount').textContent = `₹${Math.round(requiredDailySaving)}`;
+            document.getElementById('monthlyAmount').textContent = `₹${Math.round(requiredMonthlySaving)}`;
+            document.getElementById('incomePercent').textContent = `${((requiredMonthlySaving/monthlyIncome)*100).toFixed(1)}%`;
+
+            // Update tips
+            updateTips(requiredDailySaving);
+
+            // Loan calculations (15% annual interest)
+            const monthlyInterest = 0.15 / 12;
+            const loanEMI = remainingAmount > 0 ? 
+                (remainingAmount * monthlyInterest * Math.pow(1 + monthlyInterest, timeline)) / 
+                (Math.pow(1 + monthlyInterest, timeline) - 1) : 0;
+            const totalLoanPayment = loanEMI * timeline;
+            const totalInterest = totalLoanPayment - remainingAmount;
+
+            // RD calculations (6.5% annual interest)
+            const monthlyRdInterest = 0.065 / 12;
+            const rdMaturityAmount = requiredMonthlySaving * timeline + 
+                (requiredMonthlySaving * timeline * (timeline + 1) * monthlyRdInterest) / 24;
+            const rdInterestEarned = rdMaturityAmount - (requiredMonthlySaving * timeline);
+
+            // MF SIP calculations (12% annual return)
+            const monthlyMfReturn = 0.12 / 12;
+            const mfMaturityAmount = requiredMonthlySaving * 
+                (((Math.pow(1 + monthlyMfReturn, timeline) - 1) / monthlyMfReturn) * (1 + monthlyMfReturn));
+            const mfGains = mfMaturityAmount - (requiredMonthlySaving * timeline);
+
+            // Update loan section
+            document.getElementById('loanEMI').textContent = formatCurrency(loanEMI);
+            document.getElementById('loanInterest').textContent = formatCurrency(totalInterest);
+            document.getElementById('loanTotal').textContent = formatCurrency(totalLoanPayment);
+
+            // Update RD section
+            document.getElementById('rdMonthly').textContent = formatCurrency(requiredMonthlySaving);
+            document.getElementById('rdInterest').textContent = formatCurrency(rdInterestEarned);
+            document.getElementById('rdMaturity').textContent = formatCurrency(rdMaturityAmount);
+
+            // Update MF section
+            document.getElementById('mfMonthly').textContent = formatCurrency(requiredMonthlySaving);
+            document.getElementById('mfGains').textContent = formatCurrency(mfGains);
+            document.getElementById('mfMaturity').textContent = formatCurrency(mfMaturityAmount);
+
+            // Update recommendations
+            updateRecommendations(timeline, totalInterest, requiredDailySaving);
+        }
+
+        function updateTips(dailyAmount) {
+            const relevantTips = savingTips.filter(tip => tip.amount <= dailyAmount).slice(-2);
+            const tipsGrid = document.getElementById('tipsGrid');
+            
+            if (relevantTips.length > 0) {
+                tipsGrid.innerHTML = relevantTips.map(tip => 
+                    `<div class="tip-card">• ${tip.tip} (₹${tip.amount}/day)</div>`
+                ).join('');
+                document.getElementById('tipsSection').style.display = 'block';
+            } else {
+                document.getElementById('tipsSection').style.display = 'none';
+            }
+        }
+
+        function updateRecommendations(timeline, totalInterest, dailyAmount) {
+            const recommendationText = timeline <= 12 ? 
+                `For ${timeline} months timeline, <strong>RD + Emergency MF SIP</strong> is recommended. Save 70% in RD for guaranteed goal achievement, 30% in MF for wealth building.` :
+                `For ${timeline} months timeline, <strong>MF SIP</strong> is recommended. Longer timeline allows you to benefit from market growth and build wealth.`;
+            
+            const loanWarning = `Personal loans cost ₹${Math.round(totalInterest/1000)}k extra in interest. That's ${Math.round(totalInterest/dailyAmount)} days of your target daily savings!`;
+            
+            document.getElementById('recommendationText').innerHTML = recommendationText;
+            document.getElementById('loanWarning').textContent = loanWarning;
+            document.getElementById('ctaTitle').textContent = `Start with just ₹${Math.round(dailyAmount)} today!`;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Goal selection
+            document.querySelectorAll('.goal-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove previous selection
+                    document.querySelectorAll('.goal-button').forEach(b => b.classList.remove('selected'));
+                    
+                    // Add selection to clicked button
+                    this.classList.add('selected');
+                    selectedGoal = this.dataset.goal;
+                    
+                    // Update slider range and value
+                    const goal = goals[selectedGoal];
+                    const targetSlider = document.getElementById('targetSlider');
+                    targetSlider.min = goal.min;
+                    targetSlider.max = goal.max;
+                    targetSlider.value = goal.default;
+                    targetAmount = goal.default;
+                    
+                    // Update display
+                    document.getElementById('targetDisplay').textContent = formatCurrency(targetAmount);
+                    
+                    // Show sections
+                    document.getElementById('configSection').classList.remove('hidden');
+                    document.getElementById('dailyChallenge').classList.remove('hidden');
+                    document.getElementById('comparisonSection').classList.remove('hidden');
+                    document.getElementById('recommendationSection').classList.remove('hidden');
+                    
+                    // Calculate and update all values
+                    calculateAll();
+                });
+            });
+
+            // Target amount slider
+            document.getElementById('targetSlider').addEventListener('input', function() {
+                targetAmount = parseInt(this.value);
+                document.getElementById('targetDisplay').textContent = formatCurrency(targetAmount);
+                calculateAll();
+            });
+
+            // Timeline slider
+            document.getElementById('timelineSlider').addEventListener('input', function() {
+                timeline = parseInt(this.value);
+                document.getElementById('timelineDisplay').textContent = `${timeline} months`;
+                calculateAll();
+            });
+
+            // Current savings input
+            document.getElementById('currentSavings').addEventListener('input', function() {
+                currentSavings = parseInt(this.value) || 0;
+                calculateAll();
+            });
+
+            // Monthly income input
+            document.getElementById('monthlyIncome').addEventListener('input', function() {
+                monthlyIncome = parseInt(this.value) || 30000;
+                calculateAll();
+            });
+        });
+    </script>
+</body>
+</html>
